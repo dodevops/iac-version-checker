@@ -37,7 +37,8 @@ func GetLatestProviderVersion(provider string) (string, error) {
 }
 
 // getLatestTerraformVersion retrieves the latest stable Terraform version from GitHub releases
-func GetLatestTerraformVersion(terraformReleasesURL string) (string, error) {
+func GetLatestTerraformVersion() (string, error) {
+	const terraformReleasesURL = "https://api.github.com/repos/hashicorp/terraform/releases/latest"
 	resp, err := http.Get(terraformReleasesURL)
 	if err != nil {
 		return "", err
