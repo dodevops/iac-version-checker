@@ -11,7 +11,7 @@ import (
 // getLatestProviderVersion retrieves the latest stable provider version from GitHub releases
 func GetLatestProviderVersion(provider string) (string, error) {
 	providerReleasesURL := fmt.Sprintf("https://api.github.com/repos/hashicorp/%s/releases/latest", provider)
-
+	fmt.Println(providerReleasesURL)
 	resp, err := http.Get(providerReleasesURL)
 	if err != nil {
 		return "", err
