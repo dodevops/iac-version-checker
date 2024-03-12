@@ -9,9 +9,9 @@ import (
 )
 
 // getLatestProviderVersion retrieves the latest stable provider version from GitHub releases
-func GetLatestProviderVersion(provider string) (string, error) {
-	providerReleasesURL := fmt.Sprintf("https://api.github.com/repos/hashicorp/%s/releases/latest", provider)
-	fmt.Println(providerReleasesURL)
+func GetLatestProviderVersion(provider string, source string) (string, error) {
+	splitSource := strings.Split(source, `/`)
+	providerReleasesURL := fmt.Sprintf("https://api.github.com/repos/%s/terraform-provider-%s/releases/latest", splitSource[0], provider)
 	resp, err := http.Get(providerReleasesURL)
 	if err != nil {
 		return "", err
@@ -32,7 +32,6 @@ func GetLatestProviderVersion(provider string) (string, error) {
 		return "", fmt.Errorf("Failed to extract latest %s provider version from the response", provider)
 	}
 
-	// Extract the version from the tag name (e.g., "v2.0.0" becomes "2.0.0")
 	return strings.TrimPrefix(tagName, "v"), nil
 }
 

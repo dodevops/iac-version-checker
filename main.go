@@ -72,8 +72,6 @@ func scanAction(path string) {
 		}
 		if !info.IsDir() && strings.HasSuffix(info.Name(), ".tf") {
 			//store the path of the file in a list
-
-			// display number of files found
 			fileCount++
 			terraformFilePath = append(terraformFilePath, path)
 
@@ -111,7 +109,7 @@ func checkTerraformVersion(filePath string) {
 	str := string(file)
 
 	if match := regexp.MustCompile(`\brequired_version\s*=\s*"(.*?)"`).FindStringSubmatch(str); len(match) > 1 {
-		version := match[1]
+		version := regexp.MustCompile(`[^~>]+`).FindString(match[1])
 		fmt.Printf("Terraform version specified in %s: %s\n", filePath, version)
 		// Compare with the latest stable release
 		latestVersion, err := utils.GetLatestTerraformVersion()
@@ -147,14 +145,14 @@ func parseRequiredProvidersBlock(block string) {
 			version := regexp.MustCompile(`[^~>]+`).FindString(provider[3])
 			fmt.Printf("Source: %s\n", provider[2])
 			fmt.Printf("Version: %s\n", version)
-			latestProviderVersion, err := utils.GetLatestProviderVersion(provider[1])
+			latestProviderVersion, err := utils.GetLatestProviderVersion(provider[1], provider[2])
 			if err != nil {
 				fmt.Printf("Error retrieving latest %s provider version: %v\n", provider, err)
 				return
 			}
 
 			if version != latestProviderVersion {
-				fmt.Printf("Warning: The specified %s provider version is outdated. Latest version: %s\n", provider, latestProviderVersion)
+				fmt.Printf("Warning: The specified %s provider version is outdated. Latest version: %s\n", provider[1], latestProviderVersion)
 			}
 		}
 	}
