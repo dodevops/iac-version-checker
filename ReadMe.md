@@ -39,6 +39,22 @@ The Terraform Version Checker CLI will provide a straightforward command-line in
 
 
 ---
+---
+# Implementation specifics
+## Terraform Version Checks
+For terraform code version checks we could use a regex pattern and directory walk to check for required versions. 
+Checking for latest versions can be done by using the github api and creating the url from the provider name. 
+
+Url example:
+```
+https://api.github.com/repos/${providerSource}/terraform-provider-${providerName}/releases/latest
+
+```
+Export the report or warnings to prometheus metrics or another datasource. 
+## K8S Version checks
+Different codebases can use k8s in different ways. 
+You could use a cloud based solution(AKS,EKS,GKE) or a onprem solution(VMWare Tanzu, Rancher ...etc). 
+
 
 ## Usage Guide
 
